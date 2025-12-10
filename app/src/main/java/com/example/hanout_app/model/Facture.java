@@ -37,7 +37,6 @@ public class Facture {
     }
 
     public double getMontant_facture() {
-        computeTotal();
         return montant_facture;
     }
 
