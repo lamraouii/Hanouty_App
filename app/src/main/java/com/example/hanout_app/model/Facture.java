@@ -37,6 +37,7 @@ public class Facture {
     }
 
     public double getMontant_facture() {
+        computeTotal();
         return montant_facture;
     }
 
@@ -60,10 +61,14 @@ public class Facture {
     }
     public void addSale(Sale sale){
         sales.add(sale);
+        computeTotal();
     }
 
     public void removeSale(Sale sale){
-        sales.remove(sale);}
+        sales.remove(sale);
+        computeTotal();
+
+    }
 
     public void computeTotal() {
         double total = 0;
