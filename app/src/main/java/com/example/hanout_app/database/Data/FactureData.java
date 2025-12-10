@@ -1,4 +1,4 @@
-package com.example.hanout_app.database;
+package com.example.hanout_app.database.Data;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -6,18 +6,16 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.hanout_app.model.Sale;
 import com.example.hanout_app.model.User;
 import com.example.hanout_app.utils.helpers.DateConvert;
 
 import java.util.Date;
-import java.util.List;
 
 @TypeConverters({DateConvert.class})
-@Entity(tableName = "facture",
+@Entity(tableName = "factures",
         foreignKeys = {
             @ForeignKey(
-                    entity = User.class,
+                    entity = UserData.class,
                     parentColumns = {"id_User"},
                     childColumns = {"userId"},
                     onDelete = ForeignKey.CASCADE

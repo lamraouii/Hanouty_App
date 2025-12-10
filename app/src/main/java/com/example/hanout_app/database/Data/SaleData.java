@@ -1,4 +1,4 @@
-package com.example.hanout_app.database;
+package com.example.hanout_app.database.Data;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -15,13 +15,13 @@ import java.util.Date;
 @Entity(tableName = "Sales_products",
     foreignKeys = {
         @ForeignKey(
-                entity = Product.class,
-                parentColumns = {"id_product"},
+                entity = ProductData.class,
+                parentColumns = {"id_Product"},
                 childColumns = {"product_id"},
                 onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(
-                entity = Facture.class,
+                entity = FactureData.class,
                 parentColumns = {"id_facture"},
                 childColumns = {"facture_id"},
                 onDelete = ForeignKey.CASCADE
@@ -67,6 +67,21 @@ public class SaleData {
         this.quantity_sold = quantity_sold;
     }
 
+    public int getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(int product_id) {
+        this.product_id = product_id;
+    }
+
+    public int getFacture_id() {
+        return facture_id;
+    }
+
+    public void setFacture_id(int facture_id) {
+        this.facture_id = facture_id;
+    }
 
     public int getId_Sale() {
         return id_Sale;

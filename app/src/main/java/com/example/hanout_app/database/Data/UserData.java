@@ -1,4 +1,4 @@
-package com.example.hanout_app.database;
+package com.example.hanout_app.database.Data;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -16,16 +16,23 @@ public class UserData {
     private String phone;
 
 
-    public UserData() {
-    }
 
-    @Ignore
-    public UserData(String name, String email, String password) {
+    public UserData(String name, String phone, String password) {
         this.name = name;
-        this.email= email;
+        this.phone= phone;
         this.password = password;
 
     }
+
+    @Ignore
+    public UserData(int id_User, String name, String email, String password, String phone) {
+        this.id_User = id_User;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
+
     public int getId_User() {
         return id_User;
     }
