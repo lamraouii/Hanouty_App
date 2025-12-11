@@ -40,7 +40,7 @@
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_store"
                 android:contentDescription="@string/app_name"
-                app:tint="@color/maron" />
+                app:tint="@color/moroccan_emerald" />
         </RelativeLayout>
     </RelativeLayout>
 
