@@ -1,5 +1,6 @@
 package com.example.hanout_app.database.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -21,10 +22,10 @@ public interface FactureDAO {
     void modifyFacture(FactureData...facture);
 
     @Query("select * from factures where id_facture = :id_facture")
-    FactureData getFactureById(int id_facture);
+    LiveData<FactureData> getFactureById(int id_facture);
 
     @Query("select * from factures where userId = :id_user")
-    List<FactureData> getAllFactureByUserId(int id_user);
+    LiveData<List<FactureData>> getAllFactureByUserId(int id_user);
 
 
 }

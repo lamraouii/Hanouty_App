@@ -1,5 +1,6 @@
 package com.example.hanout_app.database.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -11,7 +12,7 @@ import com.example.hanout_app.database.Data.ProductData;
 import java.util.List;
 
 @Dao
-public interface ProductDao {
+public interface ProductDAO {
 
     @Insert
     void addProduct(ProductData...product);
@@ -23,10 +24,10 @@ public interface ProductDao {
     void modifyProduct(ProductData product);
 
     @Query("select * from products where barcode = :barcode")
-    ProductData getProductByBarcode(String barcode);
+    LiveData<ProductData> getProductByBarcode(String barcode);
 
     @Query("select * from products")
-    List<ProductData> getAllProducts();
+    LiveData<List<ProductData>> getAllProducts();
 
 
 

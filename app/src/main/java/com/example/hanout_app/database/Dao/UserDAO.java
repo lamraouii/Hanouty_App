@@ -4,6 +4,7 @@ import com.example.hanout_app.database.Data.UserData;
 import com.example.hanout_app.model.User;
 import com.example.hanout_app.utils.helpers.DateConvert;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -24,10 +25,10 @@ public interface UserDAO {
     void deleteUser(UserData...user);
 
     @Query("select * from Users where id_User= :id_user")
-    UserData getUserById(int id_user);
+    LiveData<UserData> getUserById(int id_user);
 
     @Query("select * from Users where phone = :phone")
-    UserData getUserByPhone(String phone);
+    LiveData<UserData> getUserByPhone(String phone);
 
 
 }

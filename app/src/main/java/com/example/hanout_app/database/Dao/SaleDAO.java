@@ -1,5 +1,6 @@
 package com.example.hanout_app.database.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -27,9 +28,9 @@ public interface SaleDAO {
     SaleData getSaleById(int id_sale);
 
     @Query("select * from Sales_products where facture_id = :id_facture")
-    List<SaleData> getSalesByFactureId(int id_facture);
+    LiveData<List<SaleData>> getSalesByFactureId(int id_facture);
 
     @Query("select * from Sales_products")
-    List<SaleData> getAllSales();
+    LiveData<List<SaleData>> getAllSales();
 
 }

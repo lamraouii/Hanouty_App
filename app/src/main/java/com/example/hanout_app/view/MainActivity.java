@@ -2,52 +2,44 @@ package com.example.hanout_app.view;
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.hanout_app.R;
-import com.example.hanout_app.database.Dao.UserDAO;
+import com.example.hanout_app.database.Data.ProductData;
 import com.example.hanout_app.database.Data.UserData;
 import com.example.hanout_app.database.HanoutDatabase;
-import com.example.hanout_app.model.User;
+import com.example.hanout_app.database.repository.Repository;
 
 public class MainActivity extends AppCompatActivity {
+
+    Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        repository = new Repository(getApplication());
+
+        // Insert sample data in background
+        HanoutDatabase.databaseWriteExecutor.execute(() -> {
+            // Insert a new user
+            repository.addUser(new UserData("ismail", "0673667177", "1234"));
+
+            // Insert sample products
+            ProductData Pd1 = new ProductData("hlib", 100, 4.00);
+            ProductData Pd2 = new ProductData("tmer", 100, 40.00);
+            ProductData Pd3 = new ProductData("lben", 100, 5.00);
+            repository.addProduct(Pd1, Pd2, Pd3);
         });
 
-        HanoutDatabase db = HanoutDatabase.getDatabase(this);
-        UserDAO userDAO = db.userDAO();
-
-// TEST INSERT ON BACKGROUND THREAD
-        HanoutDatabase.databaseWriteExecutor.execute(() -> {
-            // Create a new User
-            UserData user = new UserData("test_user", "0673667177", "1234");
-            userDAO.addUser(user);
-
-            // Read it back
-            UserData loaded = userDAO.getUserById(1);
-
-            if (loaded != null) {
-                System.out.println(">>> Loaded User: " + loaded.getName());
+        // Observe the user with id 1 safely
+        repository.getUserById(1).observe(this, user -> {
+            if (user != null) {
+                System.out.println(">>> Loaded User: " + user.getName());
             } else {
                 System.out.println(">>> No user with id 1");
             }
         });
-
-
-
-
     }
 }

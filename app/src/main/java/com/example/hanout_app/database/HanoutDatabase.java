@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.hanout_app.database.Dao.FactureDAO;
-import com.example.hanout_app.database.Dao.ProductDao;
+import com.example.hanout_app.database.Dao.ProductDAO;
 import com.example.hanout_app.database.Dao.SaleDAO;
 import com.example.hanout_app.database.Dao.UserDAO;
 import com.example.hanout_app.database.Data.FactureData;
@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
             )
 public abstract class HanoutDatabase extends RoomDatabase {
     public abstract UserDAO userDAO();
-    public abstract ProductDao productDAO();
+    public abstract ProductDAO productDAO();
     public abstract FactureDAO factureDAO();
     public abstract SaleDAO saleDAO();
 
