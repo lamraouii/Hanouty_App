@@ -1,4 +1,4 @@
-package com.example.hanout_app.database;
+package com.example.hanout_app.database.Data;
 
 
 import androidx.annotation.NonNull;
@@ -18,10 +18,16 @@ public class ProductData {
     private String barcode;
 
 
-    public ProductData() {
+    @Ignore
+    public ProductData(int id_Product, String name, int quantity, double price, String imageUrl, String barcode) {
+        this.id_Product = id_Product;
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.barcode = barcode;
     }
 
-    @Ignore
     public ProductData(String name, int quantity, double price) {
         this.name = name;
         this.quantity = quantity;
