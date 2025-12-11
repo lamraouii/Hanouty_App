@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_cream">
+
+    <!-- Section supérieure avec fond terracotta -->
+    <RelativeLayout
+        android:id="@+id/topSection"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@id/contentSection"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/rounded_maron_bg"
+        android:gravity="center">
+
+        <!-- Image du motif marocain -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.1"
+            android:scaleType="centerCrop"
+            android:src="@drawable/rounded_pattern_bg" />
+
+        <!-- Logo Store dans cercle -->
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/circle_icon_bg" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_store"
+                app:tint="@color/maron" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!-- Section centrale avec texte -->
+    <LinearLayout
+        android:id="@+id/contentSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/pageIndicators"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenue sur Hanouty"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_dark"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gérez votre commerce facilement avec notre application mobile"
+            android:textSize="14sp"
+            android:textColor="@color/hanouty_text_secondary"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp" />
+    </LinearLayout>
+
+    <!-- Indicateurs de pagination -->
+    <LinearLayout
+        android:id="@+id/pageIndicators"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnNext"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="32dp"
+            android:layout_height="8dp"
+            android:background="@drawable/indicator_active"
+            android:layout_marginEnd="8dp" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/indicator_inactive"
+            android:layout_marginEnd="8dp" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/indicator_inactive" />
+    </LinearLayout>
+
+    <!-- Bouton Suivant -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/button_maron_bg"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="Suivant"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_semibold"
+        android:textAllCaps="false" />
+
+</RelativeLayout>

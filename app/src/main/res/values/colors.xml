@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="vert">#59a189</color>
+    <color name="maron">#C17431</color>
+    <color name="red">#DC0000</color>
+    <color name="hanouty_green">#22C55E</color>
+    <color name="hanouty_background">#F3F4F6</color>
+    <color name="hanouty_text_primary">#1F2937</color>
+    <color name="hanouty_text_secondary">#6B7280</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="orange">#FF9800</color>
+    <color name="bleu">#5586c2</color>
+    <color name="royal">#1a4c89</color>
+    <color name="background_cream">#fcfaf7</color>
+    <color name="text_dark">#2b241c</color>
+    <color name="backg">#FFE8E0</color>
+    <!-- Couleurs Marocaines pour Onboarding -->
+    <!-- Step 1: Terracotta/Marron -->
+    <color name="moroccan_terracotta">#B85C3F</color>
+    <color name="moroccan_terracotta_dark">#8B4513</color>
+    <color name="moroccan_green_button">#2D9B6A</color>
+    
+    <!-- Step 2: Bleu Royal Marocain -->
+    <color name="moroccan_royal_blue">#1A5F8A</color>
+    <color name="moroccan_royal_blue_dark">#0F4566</color>
+    <color name="moroccan_teal_button">#1B9AAA</color>
+    
+    <!-- Step 3: Vert Émeraude Marocain -->
+    <color name="moroccan_emerald">#228B5C</color>
+    <color name="moroccan_emerald_dark">#1B6E48</color>
+    <color name="moroccan_gold_button">#D4AF37</color>
+
+    <!-- Sign In: Violet/Pourpre Marocain -->
+    <color name="moroccan_deep_purple">#6B3FA0</color>
+    <color name="moroccan_deep_purple_dark">#4A2C70</color>
+    <color name="moroccan_purple">#8B5FBF</color>
+
 </resources>
