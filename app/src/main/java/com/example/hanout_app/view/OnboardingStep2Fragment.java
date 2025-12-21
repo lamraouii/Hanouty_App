@@ -21,7 +21,7 @@ public class OnboardingStep2Fragment extends Fragment {
         // Changer la couleur de la barre d'état en bleu
         ((MainActivity) getActivity()).setStatusBarColor(R.color.moroccan_royal_blue);
 
-        Button btnNext = view.findViewById(R.id.btnNext);
+        Button btnNext = view.findViewById(R.id.btnNext2);
         btnNext.setOnClickListener(v -> {
             ((MainActivity) getActivity()).loadFragment(new OnboardingStep3Fragment());
         });

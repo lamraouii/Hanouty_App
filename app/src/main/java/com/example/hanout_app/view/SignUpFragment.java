@@ -48,11 +48,43 @@ public class SignUpFragment extends Fragment {
 
             if (name.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(getContext(), "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+            } else if (phone.length() != 10) {
+                Toast.makeText(getContext(), "Le numéro de téléphone doit contenir 10 chiffres", Toast.LENGTH_SHORT)
+                        .show();
             } else if (!password.equals(confirmPassword)) {
                 Toast.makeText(getContext(), "Les mots de passe ne correspondent pas", Toast.LENGTH_SHORT).show();
             } else {
-                // TODO: Implémenter la logique d'inscription
-                Toast.makeText(getContext(), "Inscription en cours...", Toast.LENGTH_SHORT).show();
+                // Background processing
+                com.example.hanout_app.database.HanoutDatabase.databaseWriteExecutor.execute(() -> {
+                    com.example.hanout_app.database.Dao.UserDAO userDao = com.example.hanout_app.database.HanoutDatabase
+                            .getInstance(getContext()).userDAO();
+
+                    // Check if already exists
+                    if (userDao.getUserByPhoneSync(phone) != null) {
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() -> Toast
+                                    .makeText(getContext(), "Ce numéro existe déjà", Toast.LENGTH_SHORT).show());
+                        }
+                    } else {
+                        // Create User
+                        // Assuming email is optional for now or setting a dummy one based on phone
+                        com.example.hanout_app.database.Data.UserData newUser = new com.example.hanout_app.database.Data.UserData(
+                                name, phone, password);
+                        // Using constructor with name, phone, password. Be sure UserData has it or use
+                        // setters.
+                        // If no matching constructor, I'll use the fields directly.
+                        newUser.setEmail(phone + "@hanouty.com"); // Dummy email as placeholder
+
+                        userDao.addUser(newUser);
+
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() -> {
+                                Toast.makeText(getContext(), "Compte créé avec succès", Toast.LENGTH_SHORT).show();
+                                ((MainActivity) getActivity()).navigateToSignIn();
+                            });
+                        }
+                    }
+                });
             }
         });
 

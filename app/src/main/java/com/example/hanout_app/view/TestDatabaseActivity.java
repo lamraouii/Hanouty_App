@@ -1,5 +1,6 @@
 package com.example.hanout_app.view;
 //
+
 //import android.os.Bundle;
 //
 //import androidx.appcompat.app.AppCompatActivity;
@@ -41,9 +42,9 @@ public class TestDatabaseActivity extends AppCompatActivity {
             repository.addUser(new UserData("ismail", "0673667177", "1234"));
 
             // Insert sample products
-            ProductData Pd1 = new ProductData("hlib", 100, 4.00);
-            ProductData Pd2 = new ProductData("tmer", 100, 40.00);
-            ProductData Pd3 = new ProductData("lben", 100, 5.00);
+            ProductData Pd1 = new ProductData("hlib", 100, 4.00, 1);
+            ProductData Pd2 = new ProductData("tmer", 100, 40.00, 1);
+            ProductData Pd3 = new ProductData("lben", 100, 5.00, 1);
             repository.addProduct(Pd1, Pd2, Pd3);
         });
 

@@ -100,25 +100,21 @@
         <View
             android:layout_width="32dp"
             android:layout_height="8dp"
-            android:background="@drawable/indicator_active" />
+            android:background="@drawable/indicator_active3" />
     </LinearLayout>
 
     <!-- Bouton Commencer -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnStart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/button_green_bg"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
         android:text="Commencer"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        android:fontFamily="@font/poppins_semibold"
         android:textAllCaps="false" />
 
 </RelativeLayout>

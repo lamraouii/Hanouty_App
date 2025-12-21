@@ -1,6 +1,5 @@
 package com.example.hanout_app.database.Data;
 
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -17,21 +16,33 @@ public class ProductData {
     private String imageUrl;
     private String barcode;
 
+    private int userId;
 
     @Ignore
-    public ProductData(int id_Product, String name, int quantity, double price, String imageUrl, String barcode) {
+    public ProductData(int id_Product, String name, int quantity, double price, String imageUrl, String barcode,
+            int userId) {
         this.id_Product = id_Product;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
         this.imageUrl = imageUrl;
         this.barcode = barcode;
+        this.userId = userId;
     }
 
-    public ProductData(String name, int quantity, double price) {
+    public ProductData(String name, int quantity, double price, int userId) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getId_Product() {

@@ -15,10 +15,10 @@ import java.util.List;
 public interface ProductDAO {
 
     @Insert
-    void addProduct(ProductData...product);
+    void addProduct(ProductData... product);
 
     @Delete
-    void deleteProduct(ProductData...product);
+    void deleteProduct(ProductData... product);
 
     @Update
     void modifyProduct(ProductData product);
@@ -26,11 +26,21 @@ public interface ProductDAO {
     @Query("select * from products where barcode = :barcode")
     LiveData<ProductData> getProductByBarcode(String barcode);
 
+    @Query("select * from products where barcode = :barcode")
+    ProductData checkProductByBarcode(String barcode);
+
+    @Query("select * from products where userId = :userId")
+    LiveData<List<ProductData>> getProductsByUserId(int userId);
+
     @Query("select * from products")
     LiveData<List<ProductData>> getAllProducts();
 
+    @Query("SELECT COUNT(*) FROM products WHERE quantity <= :threshold AND userId = :userId")
+    LiveData<Integer> getLowStockCount(int threshold, int userId);
 
+    @Query("SELECT SUM(price * quantity) FROM products WHERE userId = :userId")
+    LiveData<Double> getTotalStockValue(int userId);
 
-
-
+    @Query("SELECT COUNT(*) FROM products WHERE userId = :userId")
+    LiveData<Integer> getProductCount(int userId);
 }

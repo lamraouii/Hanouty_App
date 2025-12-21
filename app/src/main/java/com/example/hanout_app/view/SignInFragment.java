@@ -45,8 +45,37 @@ public class SignInFragment extends Fragment {
             if (phone.isEmpty() || password.isEmpty()) {
                 Toast.makeText(getContext(), "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
             } else {
-                // TODO: Implémenter la logique de connexion
-                Toast.makeText(getContext(), "Connexion en cours...", Toast.LENGTH_SHORT).show();
+                // Verify login in background
+                com.example.hanout_app.database.HanoutDatabase.databaseWriteExecutor.execute(() -> {
+                    com.example.hanout_app.database.Data.UserData user = com.example.hanout_app.database.HanoutDatabase
+                            .getInstance(getContext())
+                            .userDAO().getUserByPhoneSync(phone);
+
+                    // Back to Main Thread for UI updates
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            if (user == null) {
+                                Toast.makeText(getContext(), "Ce numéro de téléphone n'existe pas", Toast.LENGTH_SHORT)
+                                        .show();
+                            } else if (!user.getPassword().equals(password)) {
+                                Toast.makeText(getContext(), "Mot de passe incorrect", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Login Success
+                                Toast.makeText(getContext(), "Connexion réussie!", Toast.LENGTH_SHORT).show();
+
+                                // Save Session
+                                android.content.SharedPreferences prefs = getActivity()
+                                        .getSharedPreferences("HanoutyPrefs", android.content.Context.MODE_PRIVATE);
+                                android.content.SharedPreferences.Editor editor = prefs.edit();
+                                editor.putBoolean("isLoggedIn", true);
+                                editor.putInt("userId", user.getId_User());
+                                editor.apply();
+
+                                ((MainActivity) getActivity()).navigateToHome();
+                            }
+                        });
+                    }
+                });
             }
         });
 

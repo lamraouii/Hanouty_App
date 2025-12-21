@@ -34,9 +34,16 @@ public class MainActivity extends AppCompatActivity {
                     android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
-        // Démarrer avec le premier écran d'onboarding
+        // Démarrer avec le premier écran d'onboarding ou Home si connecté
         if (savedInstanceState == null) {
-            loadFragment(new OnboardingStep1Fragment());
+            android.content.SharedPreferences prefs = getSharedPreferences("HanoutyPrefs", MODE_PRIVATE);
+            boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
+
+            if (isLoggedIn) {
+                loadFragment(new HomeFragment());
+            } else {
+                loadFragment(new OnboardingStep1Fragment());
+            }
         }
     }
 
@@ -54,11 +61,50 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(new SignUpFragment());
     }
 
+    public void navigateToHome() {
+        loadFragment(new HomeFragment());
+    }
+
+    public void navigateToProducts() {
+        loadFragment(new ProductsFragment());
+    }
+
+    public void navigateToProfile() {
+        loadFragment(new ProfileFragment());
+    }
+
+    public void navigateToEditProfile() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, new EditProfileFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     // Méthode pour changer la couleur de la barre d'état dynamiquement
     public void setStatusBarColor(int colorResId) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(colorResId, null));
         }
     }
+
+    public void navigateToAddProduct() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, new AddProductFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void navigateToProductDetails(int productId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, ProductDetailsFragment.newInstance(productId));
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void navigateToSales() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, new com.example.hanout_app.view.SalesFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

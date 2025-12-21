@@ -13,16 +13,16 @@ import androidx.room.TypeConverters;
 import androidx.room.Update;
 
 @Dao
-@TypeConverters({DateConvert.class})
+@TypeConverters({ DateConvert.class })
 public interface UserDAO {
     @Insert
-    void addUser(UserData...user);
+    void addUser(UserData... user);
 
     @Update
-    void modifyUser(UserData...user);
+    void modifyUser(UserData... user);
 
     @Delete
-    void deleteUser(UserData...user);
+    void deleteUser(UserData... user);
 
     @Query("select * from Users where id_User= :id_user")
     LiveData<UserData> getUserById(int id_user);
@@ -30,5 +30,7 @@ public interface UserDAO {
     @Query("select * from Users where phone = :phone")
     LiveData<UserData> getUserByPhone(String phone);
 
+    @Query("select * from Users where phone = :phone")
+    UserData getUserByPhoneSync(String phone);
 
 }

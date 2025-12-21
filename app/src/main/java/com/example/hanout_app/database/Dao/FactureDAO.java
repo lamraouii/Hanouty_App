@@ -14,12 +14,13 @@ import java.util.List;
 @Dao
 public interface FactureDAO {
     @Insert
-    void addFacture(FactureData...facture);
+    long addFacture(FactureData facture);
 
     @Delete
-    void deleteFacture(FactureData...facture);
+    void deleteFacture(FactureData... facture);
+
     @Update
-    void modifyFacture(FactureData...facture);
+    void modifyFacture(FactureData... facture);
 
     @Query("select * from factures where id_facture = :id_facture")
     LiveData<FactureData> getFactureById(int id_facture);
@@ -27,5 +28,9 @@ public interface FactureDAO {
     @Query("select * from factures where userId = :id_user")
     LiveData<List<FactureData>> getAllFactureByUserId(int id_user);
 
+    @Query("SELECT SUM(montant_facture) FROM factures WHERE date_facture >= :startTime AND date_facture <= :endTime AND userId = :userId")
+    LiveData<Double> getDailySalesSum(long startTime, long endTime, int userId);
 
+    @Query("SELECT * FROM factures WHERE userId = :id_user ORDER BY date_facture DESC LIMIT :limit")
+    LiveData<List<FactureData>> getLastNFacturesByUserId(int id_user, int limit);
 }

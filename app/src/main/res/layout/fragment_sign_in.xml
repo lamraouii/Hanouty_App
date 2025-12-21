@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/topSection"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:background="@drawable/rounded_maron_bg"
         android:gravity="center">
@@ -44,137 +44,142 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <!-- Contenu principal -->
-    <LinearLayout
-        android:id="@+id/contentSection"
+    <!-- Contenu principal avec ScrollView -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/topSection"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="24dp">
+        android:fillViewport="true">
 
-        <!-- Titre -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ahlaaan !"
-            android:textSize="28sp"
-            android:textColor="@color/text_dark"
-            android:fontFamily="@font/poppins_bold"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Sous-titre -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Connectez-vous pour gérer votre hanout"
-            android:textSize="13sp"
-            android:textColor="@color/hanouty_text_secondary"
-            android:fontFamily="@font/poppins"
-            android:gravity="center"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Champ Téléphone -->
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
+            android:id="@+id/contentSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxBackgroundMode="filled"
-            app:boxBackgroundColor="@color/white"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:startIconDrawable="@drawable/ic_phone"
-            app:startIconTint="@color/hanouty_text_secondary"
-            app:shapeAppearanceOverlay="@style/RoundedInputStyle"
-            app:hintEnabled="false"
-            style="@style/Widget.Material3.TextInputLayout.FilledBox"
-            android:layout_marginBottom="12dp">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phoneEditText"
+            <!-- Titre -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ahlaaan !"
+                android:textSize="28sp"
+                android:textColor="@color/text_dark"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Sous-titre -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connectez-vous pour gérer votre hanout"
+                android:textSize="13sp"
+                android:textColor="@color/hanouty_text_secondary"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Champ Téléphone -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Numéro de téléphone"
-                android:inputType="phone"
-                android:fontFamily="@font/poppins"
-                android:textSize="14sp"
-                android:textColor="@color/text_dark"
-                android:textColorHint="@color/hanouty_text_secondary"
-                android:paddingVertical="14dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:boxBackgroundMode="filled"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:startIconDrawable="@drawable/ic_phone"
+                app:startIconTint="@color/hanouty_text_secondary"
+                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
+                app:hintEnabled="false"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                android:layout_marginBottom="12dp">
 
-        <!-- Champ Mot de passe -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundMode="filled"
-            app:boxBackgroundColor="@color/white"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:startIconDrawable="@drawable/ic_lock"
-            app:startIconTint="@color/hanouty_text_secondary"
-            app:endIconMode="password_toggle"
-            app:shapeAppearanceOverlay="@style/RoundedInputStyle"
-            app:hintEnabled="false"
-            style="@style/Widget.Material3.TextInputLayout.FilledBox"
-            android:layout_marginBottom="8dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/phoneEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Numéro de téléphone"
+                    android:inputType="phone"
+                    android:fontFamily="@font/poppins"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:textColorHint="@color/hanouty_text_secondary"
+                    android:paddingVertical="14dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordEditText"
+            <!-- Champ Mot de passe -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mot de passe"
-                android:inputType="textPassword"
+                app:boxBackgroundMode="filled"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/hanouty_text_secondary"
+                app:endIconMode="password_toggle"
+                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
+                app:hintEnabled="false"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox"
+                android:layout_marginBottom="8dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mot de passe"
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/poppins"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_dark"
+                    android:textColorHint="@color/hanouty_text_secondary"
+                    android:paddingVertical="14dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Mot de passe oublié -->
+            <TextView
+                android:id="@+id/forgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Mot de passe oublié ?"
+                android:textColor="@color/maron"
                 android:fontFamily="@font/poppins"
-                android:textSize="14sp"
-                android:textColor="@color/text_dark"
-                android:textColorHint="@color/hanouty_text_secondary"
-                android:paddingVertical="14dp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:textSize="13sp"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp"
+                android:layout_marginBottom="32dp" />
 
-        <!-- Mot de passe oublié -->
-        <TextView
-            android:id="@+id/forgotPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="Mot de passe oublié ?"
-            android:textColor="@color/maron"
-            android:fontFamily="@font/poppins"
-            android:textSize="13sp"
-            android:paddingEnd="4dp"
-            android:paddingStart="4dp"
-            android:layout_marginBottom="60dp" />
+            <!-- Bouton Connexion -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_maron_bg"
+                android:paddingVertical="16dp"
+                android:text="Se Connecter"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:fontFamily="@font/poppins_semibold"
+                android:textAllCaps="false"
+                android:layout_marginBottom="16dp" />
 
-        <!-- Bouton Connexion -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/loginButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_maron_bg"
-            android:paddingVertical="16dp"
-            android:text="Se Connecter"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:fontFamily="@font/poppins_semibold"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp" />
+            <!-- Bouton Inscription -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/inscription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_border"
+                android:paddingVertical="16dp"
+                android:text="Inscription"
+                android:textColor="@color/moroccan_green_button"
+                android:textSize="15sp"
+                android:fontFamily="@font/poppins_semibold"
+                android:textAllCaps="false"
+                android:layout_marginBottom="16dp" />
 
-        <!-- Bouton Inscription -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/inscription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/input_border"
-            android:paddingVertical="16dp"
-            android:text="Inscription"
-            android:textColor="@color/moroccan_green_button"
-            android:textSize="15sp"
-            android:fontFamily="@font/poppins_semibold"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp" />
-
-
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
