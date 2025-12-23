@@ -1,9 +1,36 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Hanout_App" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Status bar color (barre en haut) - couleur terracotta/marron -->
+        <item name="android:statusBarColor">@color/maron</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        
+        <!-- Navigation bar blanche (barre en bas) -->
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o">true</item>
+        
+        <!-- Input text color -->
+        <item name="android:textColorPrimary">@color/text_dark</item>
+        <item name="colorOnSurface">@color/text_dark</item>
     </style>
 
     <style name="Theme.Hanout_App" parent="Base.Theme.Hanout_App" />
+
+    <!-- Style pour les inputs avec coins très arrondis -->
+    <style name="RoundedInputStyle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30dp</item>
+    </style>
+    
+    <!-- Style amélioré pour les TextInputLayout -->
+    <style name="CustomTextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="hintTextColor">@color/hanouty_text_secondary</item>
+        <item name="android:textColorHint">@color/hanouty_text_secondary</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedInputStyle</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
 </resources>

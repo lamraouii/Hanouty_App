@@ -8,17 +8,33 @@ public class Product {
     private String imageUrl;
     private String barcode;
 
-//    public Product(String name, int quantity, double price, String imageUrl, String barcode) {
-////        this.id_Product = id_Product;
-//        this.name = name;
-//        this.quantity = quantity;
-//        this.price = price;
-//        this.imageUrl = imageUrl;
-//        this.barcode = barcode;
-//    }
+    // public Product(String name, int quantity, double price, String imageUrl,
+    // String barcode) {
+    //// this.id_Product = id_Product;
+    // this.name = name;
+    // this.quantity = quantity;
+    // this.price = price;
+    // this.imageUrl = imageUrl;
+    // this.barcode = barcode;
+    // }
 
+    private int imageResId;
 
+    public Product(String name, int quantity, double price, int imageResId, String barcode) {
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.imageResId = imageResId;
+        this.barcode = barcode;
+    }
 
+    public int getImageResId() {
+        return imageResId;
+    }
+
+    public void setImageResId(int imageResId) {
+        this.imageResId = imageResId;
+    }
 
     public int getId_Product() {
         return id_Product;
@@ -36,15 +52,18 @@ public class Product {
         this.price = price;
     }
 
-
-     public  String getName() {
+    public String getName() {
         return name;
     }
+
     public void setName(String name) {
-        this.name = name;}
+        this.name = name;
+    }
+
     public int getQuantity() {
         return quantity;
     }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -65,6 +84,6 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    //isInStock(quantityRequested) madrthach hna
+    // isInStock(quantityRequested) madrthach hna
 
 }
