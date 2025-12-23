@@ -158,7 +158,13 @@ public class HomeFragment extends Fragment {
         });
 
         rootView.findViewById(R.id.cardStock).setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Voir les articles en stock faible", Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                ProductsFragment fragment = new ProductsFragment();
+                Bundle args = new Bundle();
+                args.putBoolean("SHOW_LOW_STOCK", true);
+                fragment.setArguments(args);
+                ((MainActivity) getActivity()).loadFragment(fragment);
+            }
         });
 
         // Total Products (previously Profit) - Maybe go to Products?

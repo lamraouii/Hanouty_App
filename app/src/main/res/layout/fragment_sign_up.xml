@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/topSection"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="350dp"
         android:layout_alignParentTop="true"
         android:background="@drawable/rounded_green_bg"
         android:gravity="center">

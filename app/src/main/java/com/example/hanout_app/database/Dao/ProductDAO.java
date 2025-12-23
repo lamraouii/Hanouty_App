@@ -43,4 +43,7 @@ public interface ProductDAO {
 
     @Query("SELECT COUNT(*) FROM products WHERE userId = :userId")
     LiveData<Integer> getProductCount(int userId);
+
+    @Query("SELECT * FROM products WHERE quantity <= :threshold AND userId = :userId")
+    LiveData<List<ProductData>> getLowStockProducts(int threshold, int userId);
 }

@@ -84,7 +84,9 @@ public class ProductsFragment extends Fragment {
         });
 
         rootView.findViewById(R.id.navVente).setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Navigation vers Vente", Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                ((MainActivity) getActivity()).navigateToSales();
+            }
         });
 
         rootView.findViewById(R.id.navProduits).setOnClickListener(v -> {
@@ -107,15 +109,37 @@ public class ProductsFragment extends Fragment {
         int userId = prefs.getInt("userId", -1);
 
         if (userId != -1) {
-            // Observe products for this user
-            database.productDAO().getProductsByUserId(userId).observe(getViewLifecycleOwner(), products -> {
-                if (products != null && !products.isEmpty()) {
-                    adapter.setProducts(products);
-                } else {
-                    // Empty state
-                    Toast.makeText(getContext(), "Aucun produit trouvé. Ajoutez-en un !", Toast.LENGTH_SHORT).show();
-                }
-            });
+            // Check for Low Stock Argument
+            Bundle args = getArguments();
+            boolean showLowStockOnly = false;
+            if (args != null) {
+                showLowStockOnly = args.getBoolean("SHOW_LOW_STOCK", false);
+            }
+
+            if (showLowStockOnly) {
+                database.productDAO().getLowStockProducts(5, userId).observe(getViewLifecycleOwner(), products -> {
+                    if (products != null && !products.isEmpty()) {
+                        adapter.setProducts(products);
+                        Toast.makeText(getContext(), "Affichage du stock faible (< 5)", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Empty state
+                        Toast.makeText(getContext(), "Aucun article en stock faible !", Toast.LENGTH_SHORT).show();
+                        // Clear adapter or show helpful message
+                        adapter.setProducts(new java.util.ArrayList<>());
+                    }
+                });
+            } else {
+                // Default: Observe all products for this user
+                database.productDAO().getProductsByUserId(userId).observe(getViewLifecycleOwner(), products -> {
+                    if (products != null && !products.isEmpty()) {
+                        adapter.setProducts(products);
+                    } else {
+                        // Empty state
+                        Toast.makeText(getContext(), "Aucun produit trouvé. Ajoutez-en un !", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                });
+            }
         }
     }
 }
