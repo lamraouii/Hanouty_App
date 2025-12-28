@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/background_cream">
 
-    <!-- Header Section -->
     <RelativeLayout
         android:id="@+id/headerSection"
         android:layout_width="match_parent"
@@ -35,6 +34,20 @@
             android:textColor="@color/text_value"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btnDelete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/outline_auto_delete_24"
+            app:tint="@color/maron"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
+
     </RelativeLayout>
 
     <ScrollView
@@ -42,17 +55,15 @@
         android:layout_height="match_parent"
         android:layout_below="@id/headerSection"
         android:fillViewport="true">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Image Selection -->
             <FrameLayout
-                android:layout_width="180dp"
-                android:layout_height="180dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="24dp">
 
@@ -73,7 +84,7 @@
                     android:layout_marginBottom="8dp"
                     android:elevation="6dp"
                     app:tint="@color/maron" />
-                
+
                 <View
                     android:id="@+id/btnSelectImage"
                     android:layout_width="match_parent"
@@ -83,7 +94,6 @@
                     android:background="?attr/selectableItemBackground"/>
             </FrameLayout>
 
-            <!-- Name Field -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,6 +101,7 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
                 app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                 app:hintEnabled="false">
 
@@ -105,7 +116,6 @@
                     android:textColorHint="@color/text_label"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Quantity & Price Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,6 +130,7 @@
                     style="@style/Widget.Material3.TextInputLayout.FilledBox"
                     app:boxBackgroundColor="@color/white"
                     app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
                     app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                     app:hintEnabled="false">
 
@@ -142,6 +153,7 @@
                     style="@style/Widget.Material3.TextInputLayout.FilledBox"
                     app:boxBackgroundColor="@color/white"
                     app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
                     app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                     app:hintEnabled="false">
 
@@ -157,7 +169,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <!-- Barcode Field with Scan Button -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -173,6 +184,7 @@
                     style="@style/Widget.Material3.TextInputLayout.FilledBox"
                     app:boxBackgroundColor="@color/white"
                     app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
                     app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                     app:hintEnabled="false">
 

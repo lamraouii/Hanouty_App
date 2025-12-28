@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
-import android.os.Environment;
 import android.widget.Toast;
 
 import com.example.hanout_app.adapter.CartAdapter;
@@ -28,7 +27,8 @@ public class PdfGenerator {
         this.context = context;
     }
 
-    public File generateInvoice(UserData user, List<CartAdapter.CartItem> items, double totalAmount) {
+    // AJOUT DU PARAMÈTRE 'long factureId'
+    public File generateInvoice(UserData user, List<CartAdapter.CartItem> items, double totalAmount, long factureId) {
         PdfDocument document = new PdfDocument();
 
         // Page Info (A4 size approx in points: 595 x 842)
@@ -50,9 +50,9 @@ public class PdfGenerator {
         // --- HEADER ---
         // Hanout Name
         titlePaint.setColor(colorPrimary);
-        titlePaint.setTextSize(30);
+        titlePaint.setTextSize(23);
         titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("Hanoute de " + user.getName(), 40, 60, titlePaint);
+        canvas.drawText("Hanoute " + user.getName(), 40, 60, titlePaint);
 
         // Contact Info
         paint.setColor(colorDark);
@@ -62,11 +62,13 @@ public class PdfGenerator {
 
         // Date & Invoice Number
         String date = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
-        String invoiceNum = "FAC-" + System.currentTimeMillis() / 1000;
+
+        // On utilise l'ID réel pour l'affichage (plus professionnel)
+        String invoiceDisplayNum = "FAC-" + factureId;
 
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText("Date: " + date, pageWidth - 40, 60, paint);
-        canvas.drawText("N°: " + invoiceNum, pageWidth - 40, 80, paint);
+        canvas.drawText("N°: " + invoiceDisplayNum, pageWidth - 40, 80, paint);
         paint.setTextAlign(Paint.Align.LEFT);
 
         // Separator
@@ -97,12 +99,6 @@ public class PdfGenerator {
             canvas.drawText(String.format(Locale.US, "%.2f", item.getTotalPrice()), 480, y, paint);
 
             y += 25;
-
-            // Check page bound
-            if (y > pageHeight - 100) {
-                // In a real app, strict multi-page logic is needed. For simplicity, we stop
-                // here or start new page.
-            }
         }
 
         // Separator Line
@@ -130,9 +126,15 @@ public class PdfGenerator {
 
         document.finishPage(page);
 
-        // Save File
-        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(directory, "Facture_" + invoiceNum + ".pdf");
+        // --- SAUVEGARDE DU FICHIER ---
+
+        // 1. Nom exact que HomeFragment recherche
+        String fileName = "Facture_" + factureId + ".pdf";
+
+        // 2. Emplacement privé de l'app (Compatible Android 11+ et FileProvider)
+        File directory = context.getExternalFilesDir(null);
+
+        File file = new File(directory, fileName);
 
         try {
             document.writeTo(new FileOutputStream(file));

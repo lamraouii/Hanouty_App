@@ -1,5 +1,6 @@
 package com.example.hanout_app.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvUserName;
     private ImageView ivAvatar;
     private HanoutDatabase database;
+    private PreferenceManager preferenceManager; // Ajout du gestionnaire
 
     // Avatar drawables
     private final int[] avatars = {
@@ -35,12 +37,12 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Set status bar color
+        // Set status bar color if needed
         if (getActivity() != null) {
-            ((MainActivity) getActivity()).setStatusBarColor(R.color.dashboard_background);
+            //((MainActivity) getActivity()).setStatusBarColor(R.color.dashboard_background);
         }
 
         return rootView;
@@ -50,21 +52,31 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize database
+        // 1. Initialiser la Base de données et le PreferenceManager
         database = HanoutDatabase.getInstance(getContext());
+        preferenceManager = new PreferenceManager(requireContext());
 
         // Initialize views
         tvUserName = view.findViewById(R.id.tvUserName);
         ivAvatar = view.findViewById(R.id.ivAvatar);
 
-        // Load user data from Session
-        android.content.SharedPreferences prefs = getActivity().getSharedPreferences("HanoutyPrefs",
-                android.content.Context.MODE_PRIVATE);
-        int userId = prefs.getInt("userId", -1);
+        // 2. Charger les données utilisateur via PreferenceManager
+        String userIdStr = preferenceManager.getUserId();
 
-        if (userId != -1) {
-            loadUserData(userId);
+        // Comme PreferenceManager stocke un String mais la DB attend peut-être un int,
+        // on convertit et on vérifie que ce n'est pas vide.
+        if (!userIdStr.isEmpty()) {
+            try {
+                int userId = Integer.parseInt(userIdStr);
+                loadUserData(userId);
+            } catch (NumberFormatException e) {
+                // Gérer le cas où l'ID n'est pas un nombre valide
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Erreur de chargement profil", Toast.LENGTH_SHORT).show();
+            }
         }
+
+        // --- Listeners ---
 
         // User Profile Card - Open Premium Dialog
         view.findViewById(R.id.btnUserProfile).setOnClickListener(v -> openPremiumDialog());
@@ -89,36 +101,54 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "Contacter le support", Toast.LENGTH_SHORT).show();
         });
 
-        // Logout
-        view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
-            // Clear Session
-            android.content.SharedPreferences prefsLogout = getActivity().getSharedPreferences("HanoutyPrefs",
-                    android.content.Context.MODE_PRIVATE);
-            prefsLogout.edit().clear().apply();
+        // 3. Logout refactorisé avec PreferenceManager
+        /*view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
+            // Utilisation de la méthode dédiée du manager
+            preferenceManager.logoutUser();
 
             Toast.makeText(getContext(), "Déconnexion...", Toast.LENGTH_SHORT).show();
             if (getActivity() != null) {
                 ((MainActivity) getActivity()).navigateToSignIn();
             }
+        });*/
+// ... dans onViewCreated ...
+
+        view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
+            // 1. Nettoyer les préférences (Session)
+            preferenceManager.logoutUser();
+            Toast.makeText(getContext(), "Déconnexion...", Toast.LENGTH_SHORT).show();
+
+            // 2. Créer une intention pour redémarrer MainActivity
+            if (getActivity() != null) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+
+                // CES FLAGS SONT LA CLÉ :
+                // CLEAR_TASK : Vide toute la pile d'activités/fragments
+                // NEW_TASK : Démarre une nouvelle tâche vierge
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                startActivity(intent);
+
+                // 3. Fermer l'instance actuelle (juste par sécurité)
+                getActivity().finish();
+            }
         });
 
         // Bottom Navigation
+        setupBottomNavigation(view);
+    }
+
+    private void setupBottomNavigation(View view) {
         view.findViewById(R.id.navHome).setOnClickListener(v -> {
-            if (getActivity() != null) {
-                ((MainActivity) getActivity()).navigateToHome();
-            }
+            if (getActivity() != null) ((MainActivity) getActivity()).navigateToHome();
         });
 
         view.findViewById(R.id.navVente).setOnClickListener(v -> {
-            if (getActivity() != null) {
-                ((MainActivity) getActivity()).navigateToSales();
-            }
+            if (getActivity() != null) ((MainActivity) getActivity()).navigateToSales();
         });
 
         view.findViewById(R.id.navProduits).setOnClickListener(v -> {
-            if (getActivity() != null) {
-                ((MainActivity) getActivity()).navigateToProducts();
-            }
+            if (getActivity() != null) ((MainActivity) getActivity()).navigateToProducts();
         });
 
         view.findViewById(R.id.navProfile).setOnClickListener(v -> {
@@ -127,15 +157,21 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadUserData(int userId) {
+        // On observe la DB pour avoir les mises à jour en temps réel (ex: modification du nom)
         database.userDAO().getUserById(userId).observe(getViewLifecycleOwner(), new Observer<UserData>() {
             @Override
             public void onChanged(UserData userData) {
                 if (userData != null) {
                     tvUserName.setText(userData.getName());
 
-                    // Set random avatar based on user ID
+                    // Gestion de l'avatar aléatoire basé sur l'ID
+                    // Assurez-vous que getId_User() retourne bien un int
                     int avatarIndex = userData.getId_User() % avatars.length;
-                    ivAvatar.setImageResource(avatars[avatarIndex]);
+
+                    // Protection contre index hors limites (juste au cas où)
+                    if (avatarIndex >= 0 && avatarIndex < avatars.length) {
+                        ivAvatar.setImageResource(avatars[avatarIndex]);
+                    }
                 }
             }
         });

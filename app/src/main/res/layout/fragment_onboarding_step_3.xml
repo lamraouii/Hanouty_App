@@ -113,8 +113,12 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/button_green_bg"
+        android:paddingHorizontal="45dp"
         android:text="Commencer"
         android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins_semibold"
         android:textAllCaps="false" />
 
 </RelativeLayout>

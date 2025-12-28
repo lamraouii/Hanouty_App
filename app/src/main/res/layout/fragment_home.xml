@@ -31,7 +31,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -40,21 +41,13 @@
                     android:layout_centerVertical="true"
                     android:orientation="vertical">
 
+
                     <TextView
                         android:id="@+id/tvGreeting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Salam, Mohammed 👋"
-                        android:textColor="@color/text_dark"
-                        android:textSize="16sp"
-                        android:fontFamily="sans-serif-medium" />
-
-                    <TextView
-                        android:id="@+id/tvTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hanout Central"
-                        android:textColor="@color/text_title"
+                        android:textColor="@color/white"
                         android:textSize="28sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp" />
@@ -72,32 +65,44 @@
                     app:tint="@color/white" />
             </RelativeLayout>
 
-            <!-- Search Bar -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_search_bar"
                 android:orientation="horizontal"
+                android:layout_marginTop="5dp"
                 android:padding="12dp"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_search"
+                    android:src="@drawable/baseline_calendar_today_24"
                     app:tint="@color/white"
                     android:layout_marginEnd="12dp" />
-
-                <TextView
-                    android:id="@+id/tvSearchHint"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Rechercher un produit..."
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:alpha="0.8" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aujourd'hui"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:alpha="0.8" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chargement..."
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -166,15 +171,15 @@
                             android:id="@+id/tvSalesValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1,250 DH"
+                            android:text=" DH"
                             android:textColor="@color/text_value"
-                            android:textSize="24sp"
+                            android:textSize="22sp"
                             android:textStyle="bold"
                             android:layout_marginTop="4dp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                    <!-- Card 2: Valeur Stock -->
+                <!-- Card 2: Valeur Stock -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardStockValue"
                     android:layout_width="0dp"
@@ -213,9 +218,9 @@
                             android:id="@+id/tvStockValueText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0.00 DH"
+                            android:text=" DH"
                             android:textColor="@color/text_value"
-                            android:textSize="24sp"
+                            android:textSize="22sp"
                             android:textStyle="bold"
                             android:layout_marginTop="4dp" />
                     </LinearLayout>
@@ -262,7 +267,7 @@
                             android:layout_height="wrap_content"
                             android:text="0 Articles"
                             android:textColor="@color/text_value"
-                            android:textSize="24sp"
+                            android:textSize="21sp"
                             android:textStyle="bold"
                             android:layout_marginTop="4dp" />
                     </LinearLayout>
@@ -310,7 +315,7 @@
                             android:layout_height="wrap_content"
                             android:text="0"
                             android:textColor="@color/text_value"
-                            android:textSize="24sp"
+                            android:textSize="21sp"
                             android:textStyle="bold"
                             android:layout_marginTop="4dp" />
                     </LinearLayout>
@@ -352,15 +357,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
-        android:background="@drawable/bg_bottom_nav_rounded"
-        android:elevation="16dp"
-        android:paddingTop="8dp"
+        android:background="@drawable/bg_bottom_nav_floating"
+        android:elevation="12dp"
+        android:paddingVertical="8dp"
         android:paddingHorizontal="8dp"
-        android:paddingBottom="8dp"
         android:weightSum="4">
 
-        <!-- Home -->
         <LinearLayout
             android:id="@+id/navHome"
             android:layout_width="0dp"
@@ -368,28 +373,26 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingVertical="6dp"
-            android:background="@drawable/bg_nav_selected"
+            android:background="@drawable/bg_nav_pill_selected"
+            android:paddingVertical="8dp"
+            android:elevation="4dp"
             android:clickable="true"
             android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                app:tint="@color/maron" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Home"
-                android:textColor="@color/maron"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                app:tint="#C17431" /> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:textColor="#C17431"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp" />
         </LinearLayout>
 
-        <!-- Vente -->
         <LinearLayout
             android:id="@+id/navVente"
             android:layout_width="0dp"
@@ -398,26 +401,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_cart"
-                app:tint="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vente"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp" />
+                app:tint="@color/white" /> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vente"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Produits -->
         <LinearLayout
             android:id="@+id/navProduits"
             android:layout_width="0dp"
@@ -426,13 +426,13 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_store"
                 app:tint="@color/white" />
 
@@ -441,11 +441,10 @@
                 android:layout_height="wrap_content"
                 android:text="Produits"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Profile -->
         <LinearLayout
             android:id="@+id/navProfile"
             android:layout_width="0dp"
@@ -454,13 +453,13 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_person"
                 app:tint="@color/white" />
 
@@ -469,9 +468,10 @@
                 android:layout_height="wrap_content"
                 android:text="Profile"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

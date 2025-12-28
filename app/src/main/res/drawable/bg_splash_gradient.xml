@@ -1,0 +1,14 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Gradient marron marocain -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#C17431"
+            android:centerColor="#8B4513"
+            android:endColor="#B85C3F"
+            android:angle="45"/>
+        </shape>
+    </item>
+
+</layer-list>

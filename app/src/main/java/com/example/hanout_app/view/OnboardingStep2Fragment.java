@@ -1,5 +1,6 @@
 package com.example.hanout_app.view;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +20,25 @@ public class OnboardingStep2Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_onboarding_step_2, container, false);
 
         // Changer la couleur de la barre d'état en bleu
-        ((MainActivity) getActivity()).setStatusBarColor(R.color.moroccan_royal_blue);
+        //((MainActivity) getActivity()).setStatusBarColor(R.color.moroccan_royal_blue);
 
         Button btnNext = view.findViewById(R.id.btnNext2);
         btnNext.setOnClickListener(v -> {
-            ((MainActivity) getActivity()).loadFragment(new OnboardingStep3Fragment());
+            ((MainActivity) getActivity()).loadFragment(new OnboardingStep3Fragment(),false);
         });
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Forcer le portrait uniquement quand ce fragment est visible
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+
 }

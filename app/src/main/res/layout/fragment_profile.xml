@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dashboard_background">
+    android:background="@color/background_cream">
 
     <!-- Fixed Header Section -->
 
@@ -50,7 +50,7 @@
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFE8E0">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -455,15 +455,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
-        android:background="@drawable/bg_bottom_nav_rounded"
-        android:elevation="16dp"
-        android:paddingTop="8dp"
+        android:background="@drawable/bg_bottom_nav_floating"
+        android:elevation="12dp"
+        android:paddingVertical="8dp"
         android:paddingHorizontal="8dp"
-        android:paddingBottom="8dp"
         android:weightSum="4">
 
-        <!-- Home -->
         <LinearLayout
             android:id="@+id/navHome"
             android:layout_width="0dp"
@@ -472,26 +472,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                app:tint="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp" />
+                app:tint="@color/white" /> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Vente -->
         <LinearLayout
             android:id="@+id/navVente"
             android:layout_width="0dp"
@@ -500,13 +497,13 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_cart"
                 app:tint="@color/white" />
 
@@ -515,11 +512,10 @@
                 android:layout_height="wrap_content"
                 android:text="Vente"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Produits -->
         <LinearLayout
             android:id="@+id/navProduits"
             android:layout_width="0dp"
@@ -528,13 +524,13 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_store"
                 app:tint="@color/white" />
 
@@ -543,11 +539,10 @@
                 android:layout_height="wrap_content"
                 android:text="Produits"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Profile -->
         <LinearLayout
             android:id="@+id/navProfile"
             android:layout_width="0dp"
@@ -555,27 +550,26 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="6dp"
-            android:background="@drawable/bg_nav_selected"
+            android:background="@drawable/bg_nav_pill_selected"
+            android:paddingVertical="8dp"
+            android:elevation="4dp"
             android:clickable="true"
             android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_person"
-                app:tint="@color/maron" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textColor="@color/maron"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
+                app:tint="#C17431" /> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:textColor="#C17431"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp" />
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

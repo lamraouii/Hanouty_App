@@ -1,65 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_cream">
 
-    <!-- Section supérieure avec fond marron -->
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topSection"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_alignParentTop="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/rounded_maron_bg"
-        android:gravity="center">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scrollContent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Image du motif marocain -->
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:alpha="0.1"
             android:scaleType="centerCrop"
-            android:src="@drawable/rounded_pattern_bg" />
+            android:src="@drawable/rounded_pattern_bg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- Logo Store dans cercle -->
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_centerInParent="true">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/circle_icon_bg" />
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/circle_icon_bg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
                 android:id="@+id/logoImage"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_centerInParent="true"
                 android:src="@drawable/ic_store"
                 android:contentDescription="@string/app_name"
-                app:tint="@color/maron" />
-        </RelativeLayout>
-    </RelativeLayout>
+                app:tint="@color/maron"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Contenu principal avec ScrollView -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/topSection"
-        android:fillViewport="true">
+        android:id="@+id/scrollContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/topSection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.95"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:id="@+id/contentSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:padding="24dp">
 
-            <!-- Titre -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,7 +87,6 @@
                 android:fontFamily="@font/poppins_bold"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Sous-titre -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,10 +97,10 @@
                 android:gravity="center"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Champ Téléphone -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 app:boxBackgroundMode="filled"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeWidth="0dp"
@@ -92,8 +109,7 @@
                 app:startIconTint="@color/hanouty_text_secondary"
                 app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                 app:hintEnabled="false"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                android:layout_marginBottom="12dp">
+                style="@style/Widget.Material3.TextInputLayout.FilledBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneEditText"
@@ -108,7 +124,6 @@
                     android:paddingVertical="14dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Champ Mot de passe -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,21 +152,19 @@
                     android:paddingVertical="14dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Mot de passe oublié -->
             <TextView
                 android:id="@+id/forgotPassword"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:text="Mot de passe oublié ?"
                 android:textColor="@color/maron"
                 android:fontFamily="@font/poppins"
                 android:textSize="13sp"
+                android:gravity="end"
                 android:paddingEnd="4dp"
                 android:paddingStart="4dp"
                 android:layout_marginBottom="32dp" />
 
-            <!-- Bouton Connexion -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
@@ -165,7 +178,6 @@
                 android:textAllCaps="false"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Bouton Inscription -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/inscription"
                 android:layout_width="match_parent"
@@ -180,6 +192,7 @@
                 android:layout_marginBottom="16dp" />
 
         </LinearLayout>
+
     </ScrollView>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

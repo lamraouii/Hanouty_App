@@ -1,110 +1,108 @@
 package com.example.hanout_app.view;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.example.hanout_app.R;
 
 public class MainActivity extends AppCompatActivity {
+
+    private PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Activer le mode plein écran edge-to-edge
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            getWindow().setDecorFitsSystemWindows(false);
-        }
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
 
+        if (windowInsetsController != null) {
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+            windowInsetsController.setSystemBarsBehavior(
+                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            );
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            getWindow().getAttributes().layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        }
         setContentView(R.layout.activity_main);
 
-        // Configurer les couleurs des barres système
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            // Barre de statut en haut - marron
-            getWindow().setStatusBarColor(getResources().getColor(R.color.maron, null));
 
-            // Barre de navigation en bas - blanche
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.white, null));
-        }
+        preferenceManager = new PreferenceManager(this);
 
-        // Icônes sombres pour la barre de navigation blanche
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        }
-
-        // Démarrer avec le premier écran d'onboarding ou Home si connecté
         if (savedInstanceState == null) {
-            android.content.SharedPreferences prefs = getSharedPreferences("HanoutyPrefs", MODE_PRIVATE);
-            boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
-
-            if (isLoggedIn) {
-                loadFragment(new HomeFragment());
-            } else {
-                loadFragment(new OnboardingStep1Fragment());
-            }
+            loadFragment(new SplashFragment(), false);
         }
+
     }
 
-    public void loadFragment(Fragment fragment) {
+
+    /* ================= NAVIGATION ================= */
+
+    public void loadFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
         transaction.commit();
+    }
+
+    public void navigateToOnboarding() {
+        loadFragment(new OnboardingStep1Fragment(), false);
     }
 
     public void navigateToSignIn() {
-        loadFragment(new SignInFragment());
+        loadFragment(new SignInFragment(), false);
     }
 
     public void navigateToSignUp() {
-        loadFragment(new SignUpFragment());
+        loadFragment(new SignUpFragment(), false);
     }
 
     public void navigateToHome() {
-        loadFragment(new HomeFragment());
+        loadFragment(new HomeFragment(), false);
     }
 
     public void navigateToProducts() {
-        loadFragment(new ProductsFragment());
+        loadFragment(new ProductsFragment(), true);
     }
 
     public void navigateToProfile() {
-        loadFragment(new ProfileFragment());
+        loadFragment(new ProfileFragment(), true);
     }
 
     public void navigateToEditProfile() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, new EditProfileFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    // Méthode pour changer la couleur de la barre d'état dynamiquement
-    public void setStatusBarColor(int colorResId) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(colorResId, null));
-        }
+        loadFragment(new EditProfileFragment(), true);
     }
 
     public void navigateToAddProduct() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, new AddProductFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
+        loadFragment(new AddProductFragment(), true);
     }
 
     public void navigateToProductDetails(int productId) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, ProductDetailsFragment.newInstance(productId));
-        transaction.addToBackStack(null);
-        transaction.commit();
+        loadFragment(ProductDetailsFragment.newInstance(productId), true);
     }
 
     public void navigateToSales() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, new com.example.hanout_app.view.SalesFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
+        loadFragment(new SalesFragment(), true);
+    }
+
+    /* ================= GETTERS ================= */
+
+    public PreferenceManager getPreferenceManager() {
+        return preferenceManager;
     }
 }

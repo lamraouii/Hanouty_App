@@ -1,6 +1,8 @@
 package com.example.hanout_app.view;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,9 +27,13 @@ import com.example.hanout_app.database.Data.ProductData;
 import com.example.hanout_app.database.HanoutDatabase;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ProductDetailsFragment extends Fragment {
+
+    private ActivityResultLauncher<String> requestPermissionLauncher;
 
     private EditText etProductName, etQuantity, etPrice, etBarcode;
     private ImageView ivProductImage;
@@ -39,7 +45,6 @@ public class ProductDetailsFragment extends Fragment {
     private ActivityResultLauncher<Intent> barcodeScannerLauncher;
     private static final String ARG_PRODUCT_ID = "product_id";
 
-    // Standard static factory method to pass data to fragment
     public static ProductDetailsFragment newInstance(int productId) {
         ProductDetailsFragment fragment = new ProductDetailsFragment();
         Bundle args = new Bundle();
@@ -51,7 +56,7 @@ public class ProductDetailsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_product_details, container, false);
     }
 
@@ -79,15 +84,19 @@ public class ProductDetailsFragment extends Fragment {
             }
         });
 
-        // Delete button
+        // Bouton Supprimer (Corrigé)
+        View btnDelete = view.findViewById(R.id.btnDelete);
+        if (btnDelete != null) {
+            btnDelete.setOnClickListener(v -> deleteProduct());
+        }
 
-        // Scan button - Launch barcode scanner
+        // Scan button
         view.findViewById(R.id.btnScan).setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), BarcodeScannerActivity.class);
             barcodeScannerLauncher.launch(intent);
         });
 
-        // Image selection - show dialog to choose camera or gallery
+        // Image selection
         view.findViewById(R.id.btnSelectImage).setOnClickListener(v -> showImageSourceDialog());
 
         // Save button
@@ -101,17 +110,6 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     private void loadProduct(int productId) {
-        // Since DAO queries with LiveData are async, we can observe them if using that
-        // method
-        // Or we can use background thread if using a sync query.
-        // For simplicity and to reuse the sync pattern I established, let's assume I
-        // fetch all and filter or add getByIdSync.
-        // But scanning product gave us ID or matching logic.
-        // Let's use the getAll for now or add getById to DAO.
-        // Actually, if we navigated here, we probably have the Object or ID.
-        // I'll add a simple getProductById sync method to DAO for clean code or just
-        // use the observe method.
-
         database.productDAO().getAllProducts().observe(getViewLifecycleOwner(), products -> {
             for (ProductData p : products) {
                 if (p.getId_Product() == productId) {
@@ -123,8 +121,8 @@ public class ProductDetailsFragment extends Fragment {
         });
     }
 
+    // ... (Le code des Launchers reste identique) ...
     private void initializeImagePickers() {
-        // Camera launcher
         cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -133,7 +131,6 @@ public class ProductDetailsFragment extends Fragment {
                     }
                 });
 
-        // Gallery launcher
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -143,7 +140,6 @@ public class ProductDetailsFragment extends Fragment {
                     }
                 });
 
-        // Barcode scanner launcher
         barcodeScannerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -155,6 +151,17 @@ public class ProductDetailsFragment extends Fragment {
                         }
                     }
                 });
+
+        requestPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        openCamera(); // Si accepté, on ouvre la caméra
+                    } else {
+                        Toast.makeText(getContext(), "Permission caméra refusée", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     private void showImageSourceDialog() {
@@ -162,7 +169,7 @@ public class ProductDetailsFragment extends Fragment {
         builder.setTitle("Sélectionner une photo")
                 .setItems(new CharSequence[] { "Prendre une photo", "Choisir de la galerie" }, (dialog, which) -> {
                     if (which == 0) {
-                        openCamera();
+                        checkCameraPermissionAndOpen(); // On appelle la nouvelle méthode de vérification
                     } else {
                         openGallery();
                     }
@@ -170,12 +177,21 @@ public class ProductDetailsFragment extends Fragment {
                 .show();
     }
 
+    private void checkCameraPermissionAndOpen() {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(requireContext(),
+                android.Manifest.permission.CAMERA) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            openCamera();
+        } else {
+            requestPermissionLauncher.launch(android.Manifest.permission.CAMERA);
+        }
+    }
+
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create temporary file for the photo
             File photoFile = null;
             try {
+                // Créer un fichier temporaire pour la capture
                 photoFile = File.createTempFile("product_", ".jpg", getActivity().getCacheDir());
                 selectedImageUri = FileProvider.getUriForFile(getContext(),
                         "com.example.hanout_app.fileprovider", photoFile);
@@ -193,61 +209,82 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     private void populateFields() {
-        if (currentProduct == null)
-            return;
+        if (currentProduct == null) return;
         etProductName.setText(currentProduct.getName());
         etQuantity.setText(String.valueOf(currentProduct.getQuantity()));
         etPrice.setText(String.valueOf(currentProduct.getPrice()));
         etBarcode.setText(currentProduct.getBarcode());
 
-        // Load product image if available
         if (currentProduct.getImageUrl() != null && !currentProduct.getImageUrl().isEmpty()) {
             try {
+                // On utilise Uri.parse pour lire le chemin du fichier sauvegardé
                 Uri imageUri = Uri.parse(currentProduct.getImageUrl());
                 ivProductImage.setImageURI(imageUri);
             } catch (Exception e) {
-                // If image loading fails, keep the default image
+                ivProductImage.setImageResource(R.drawable.bg_icon_circle_light); // Image par défaut si erreur
             }
         }
     }
 
+    // METHODE DE SAUVEGARDE DE L'IMAGE DANS LE STOCKAGE INTERNE
+    private String saveImageToInternalStorage(Uri uri) {
+        try {
+            InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+            // Créer un fichier dans le dossier privé de l'application
+            File directory = getActivity().getFilesDir();
+            File file = new File(directory, "img_" + System.currentTimeMillis() + ".jpg");
+
+            FileOutputStream out = new FileOutputStream(file);
+            // Compresser l'image pour gagner de la place (Qualité 50%)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+            out.flush();
+            out.close();
+            inputStream.close();
+
+            // Retourner le chemin absolu en format String
+            return Uri.fromFile(file).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private void saveChanges() {
-        if (currentProduct == null)
-            return;
+        if (currentProduct == null) return;
 
         String name = etProductName.getText().toString().trim();
         String quantityStr = etQuantity.getText().toString().trim();
         String priceStr = etPrice.getText().toString().trim();
         String barcode = etBarcode.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name)) {
-            etProductName.setError("Le nom est requis");
-            return;
-        }
-        if (TextUtils.isEmpty(quantityStr)) {
-            etQuantity.setError("La quantité est requise");
-            return;
-        }
-        if (TextUtils.isEmpty(priceStr)) {
-            etPrice.setError("Le prix est requis");
-            return;
-        }
+        if (TextUtils.isEmpty(name)) { etProductName.setError("Le nom est requis"); return; }
+        if (TextUtils.isEmpty(quantityStr)) { etQuantity.setError("La quantité est requise"); return; }
+        if (TextUtils.isEmpty(priceStr)) { etPrice.setError("Le prix est requis"); return; }
 
         int quantity = Integer.parseInt(quantityStr);
         double price = Double.parseDouble(priceStr);
 
-        currentProduct.setName(name);
-        currentProduct.setQuantity(quantity);
-        currentProduct.setPrice(price);
-        currentProduct.setBarcode(barcode);
-
-        // Update image if a new one was selected
-        if (selectedImageUri != null) {
-            currentProduct.setImageUrl(selectedImageUri.toString());
-        }
-
+        // Sauvegarde de l'image DANS UN THREAD pour ne pas bloquer l'UI
         new Thread(() -> {
+            // Mettre à jour les champs de base
+            currentProduct.setName(name);
+            currentProduct.setQuantity(quantity);
+            currentProduct.setPrice(price);
+            currentProduct.setBarcode(barcode);
+
+            // GESTION DE L'IMAGE
+            if (selectedImageUri != null) {
+                String savedPath = saveImageToInternalStorage(selectedImageUri);
+                if (savedPath != null) {
+                    currentProduct.setImageUrl(savedPath);
+                }
+            }
+
+            // Mise à jour BDD
             database.productDAO().modifyProduct(currentProduct);
+
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     Toast.makeText(getContext(), "Produit mis à jour !", Toast.LENGTH_SHORT).show();
@@ -258,12 +295,11 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     private void deleteProduct() {
-        if (currentProduct == null)
-            return;
+        if (currentProduct == null) return;
 
         new AlertDialog.Builder(getContext())
                 .setTitle("Supprimer le produit")
-                .setMessage("Voulez-vous vraiment supprimer ce produit ?")
+                .setMessage("Voulez-vous vraiment supprimer " + currentProduct.getName() + " ?")
                 .setPositiveButton("Supprimer", (dialog, which) -> {
                     new Thread(() -> {
                         database.productDAO().deleteProduct(currentProduct);

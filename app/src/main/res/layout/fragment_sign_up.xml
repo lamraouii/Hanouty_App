@@ -1,185 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_cream">
 
-    <!-- Section supérieure avec fond marron -->
-    <RelativeLayout
+    <!-- ================= TOP SECTION ================= -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topSection"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_alignParentTop="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/rounded_green_bg"
-        android:gravity="center">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scrollContent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Image du motif marocain -->
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/patternBg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:alpha="0.1"
             android:scaleType="centerCrop"
-            android:src="@drawable/rounded_pattern_bg" />
+            android:src="@drawable/rounded_pattern_bg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- Logo Store dans cercle -->
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_centerInParent="true">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/circle_icon_bg" />
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/circle_icon_bg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
                 android:id="@+id/logoImage"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_centerInParent="true"
                 android:src="@drawable/ic_store"
                 android:contentDescription="@string/app_name"
-                app:tint="@color/moroccan_emerald" />
-        </RelativeLayout>
-    </RelativeLayout>
+                app:tint="@color/moroccan_emerald"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Contenu principal avec ScrollView -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ================= CONTENT SECTION SCROLLABLE ================= -->
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/topSection"
-        android:fillViewport="true">
+        android:id="@+id/scrollContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/topSection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.95"
+        app:layout_constraintEnd_toEndOf="parent">
+
 
         <LinearLayout
             android:id="@+id/contentSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:padding="24dp">
 
-            <!-- Titre -->
+            <!-- Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mrhbaaa !"
-                android:textSize="28sp"
-                android:textColor="@color/text_dark"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/poppins_bold"
-                android:layout_marginBottom="8dp" />
+                android:text="Mrhbaaa !"
+                android:textColor="@color/text_dark"
+                android:textSize="28sp" />
 
-            <!-- Sous-titre -->
+            <!-- Subtitle -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Créez votre compte pour gérer votre hanout"
-                android:textSize="13sp"
-                android:textColor="@color/hanouty_text_secondary"
+                android:layout_marginBottom="24dp"
                 android:fontFamily="@font/poppins"
                 android:gravity="center"
-                android:layout_marginBottom="24dp" />
+                android:text="Créez votre compte pour gérer votre hanout"
+                android:textColor="@color/hanouty_text_secondary"
+                android:textSize="13sp" />
 
-            <!-- Champ Nom -->
+            <!-- Nom -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxBackgroundMode="filled"
+                android:layout_marginBottom="12dp"
                 app:boxBackgroundColor="@color/white"
-                app:boxStrokeWidth="0dp"
+                app:boxBackgroundMode="filled"
                 app:boxStrokeWidthFocused="0dp"
-                app:startIconDrawable="@drawable/ic_person"
-                app:startIconTint="@color/hanouty_text_secondary"
-                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
+                app:boxStrokeWidth="0dp"
                 app:hintEnabled="false"
+                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
+                app:startIconTint="@color/hanouty_text_secondary"
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                android:layout_marginBottom="12dp">
+                app:startIconDrawable="@drawable/ic_person">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/registerName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nom complet"
-                    android:inputType="textPersonName"
                     android:fontFamily="@font/poppins"
+                    android:hint="Nom complet"
                     android:textSize="14sp"
                     android:textColor="@color/text_dark"
                     android:textColorHint="@color/hanouty_text_secondary"
+                    android:inputType="textPersonName"
                     android:paddingVertical="14dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Champ Téléphone -->
+            <!-- Téléphone -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxBackgroundMode="filled"
+                android:layout_marginBottom="12dp"
                 app:boxBackgroundColor="@color/white"
-                app:boxStrokeWidth="0dp"
+                app:boxBackgroundMode="filled"
                 app:boxStrokeWidthFocused="0dp"
+                app:boxStrokeWidth="0dp"
+                app:hintEnabled="false"
+                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                 app:startIconDrawable="@drawable/ic_phone"
                 app:startIconTint="@color/hanouty_text_secondary"
-                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
-                app:hintEnabled="false"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                android:layout_marginBottom="12dp">
+                style="@style/Widget.Material3.TextInputLayout.FilledBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/registerPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Numéro de téléphone"
                     android:inputType="phone"
-                    android:fontFamily="@font/poppins"
+                    android:hint="Numéro de téléphone"
                     android:textSize="14sp"
                     android:textColor="@color/text_dark"
+                    android:fontFamily="@font/poppins"
                     android:textColorHint="@color/hanouty_text_secondary"
                     android:paddingVertical="14dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Champ Mot de passe -->
+            <!-- Password -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxBackgroundMode="filled"
+                android:layout_marginBottom="12dp"
                 app:boxBackgroundColor="@color/white"
-                app:boxStrokeWidth="0dp"
+                app:boxBackgroundMode="filled"
                 app:boxStrokeWidthFocused="0dp"
-                app:startIconDrawable="@drawable/ic_lock"
-                app:startIconTint="@color/hanouty_text_secondary"
-                app:endIconMode="password_toggle"
-                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
+                app:boxStrokeWidth="0dp"
                 app:hintEnabled="false"
+                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
+                app:startIconTint="@color/hanouty_text_secondary"
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                android:layout_marginBottom="12dp">
+                app:startIconDrawable="@drawable/ic_lock">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/registerPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Mot de passe"
-                    android:inputType="textPassword"
-                    android:fontFamily="@font/poppins"
                     android:textSize="14sp"
                     android:textColor="@color/text_dark"
+                    android:fontFamily="@font/poppins"
                     android:textColorHint="@color/hanouty_text_secondary"
+                    android:inputType="textPassword"
                     android:paddingVertical="14dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Champ Confirmer Mot de passe -->
+            <!-- Confirm Password -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxBackgroundMode="filled"
+                android:layout_marginBottom="24dp"
                 app:boxBackgroundColor="@color/white"
+                app:boxBackgroundMode="filled"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:startIconDrawable="@drawable/ic_key"
-                app:startIconTint="@color/hanouty_text_secondary"
                 app:endIconMode="password_toggle"
-                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                 app:hintEnabled="false"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                android:layout_marginBottom="24dp">
+                app:shapeAppearanceOverlay="@style/RoundedInputStyle"
+                app:startIconDrawable="@drawable/ic_key"
+                app:boxStrokeWidthFocused="0dp"
+                app:startIconTint="@color/hanouty_text_secondary"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/registerConfirmPassword"
@@ -187,28 +210,34 @@
                     android:layout_height="wrap_content"
                     android:hint="Confirmer le mot de passe"
                     android:inputType="textPassword"
-                    android:fontFamily="@font/poppins"
                     android:textSize="14sp"
                     android:textColor="@color/text_dark"
+                    android:fontFamily="@font/poppins"
                     android:textColorHint="@color/hanouty_text_secondary"
                     android:paddingVertical="14dp" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Bouton Créer un compte -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/passwordEditText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <!-- Button -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/registerButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:background="@drawable/button_green_bg"
                 android:paddingVertical="16dp"
-                android:text="Créer un compte"
-                android:textColor="@color/white"
-                android:textSize="15sp"
                 android:fontFamily="@font/poppins_semibold"
+                android:text="Créer un compte"
                 android:textAllCaps="false"
-                android:layout_marginBottom="12dp" />
+                android:textColor="@color/white" />
 
-            <!-- Lien vers connexion -->
+            <!-- Login -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -220,20 +249,22 @@
                     android:layout_height="wrap_content"
                     android:text="Vous avez déjà un compte ? "
                     android:textColor="@color/hanouty_text_secondary"
-                    android:fontFamily="@font/poppins"
                     android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/alreadyHaveAccount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Connexion"
-                    android:textColor="@color/maron"
                     android:fontFamily="@font/poppins_semibold"
+                    android:text="Connexion"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/maron"
                     android:textSize="13sp" />
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

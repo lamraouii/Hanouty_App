@@ -3,7 +3,6 @@ package com.example.hanout_app.view;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +31,8 @@ import com.example.hanout_app.database.Data.ProductData;
 import com.example.hanout_app.database.Data.UserData;
 import com.example.hanout_app.database.HanoutDatabase;
 import com.example.hanout_app.utils.PdfGenerator;
+// 1. IMPORT DU PREFERENCE MANAGER
+import com.example.hanout_app.view.PreferenceManager;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
@@ -42,39 +42,45 @@ import java.util.List;
 public class SalesFragment extends Fragment {
 
     private RecyclerView rvCart;
-    private RecyclerView rvSearchResults; // Simple list for search results
+    private RecyclerView rvSearchResults;
     private CartAdapter cartAdapter;
     private TextView tvTotalAmount;
     private TextInputEditText etSearchProduct;
     private View layoutEmptyCart;
 
-    // Database
+    // Database & Manager
     private HanoutDatabase database;
     private UserData currentUser;
+    // 2. DECLARATION
+    private PreferenceManager preferenceManager;
 
     private ActivityResultLauncher<Intent> barcodeLauncher;
+
+    // Adapter pour la recherche
+    private com.example.hanout_app.adapter.ProductSearchAdapter searchAdapter;
+    private List<ProductData> allUserProducts = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sales, container, false);
     }
-
-    private com.example.hanout_app.adapter.ProductSearchAdapter searchAdapter;
-    private List<ProductData> allUserProducts = new ArrayList<>();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Init Database & User
+        // Init Database
         database = HanoutDatabase.getInstance(getContext());
+        // 3. INITIALISATION DU MANAGER
+        preferenceManager = new PreferenceManager(getContext());
+
         loadCurrentUser();
 
         // Init Views
         rvCart = view.findViewById(R.id.rvCart);
-        rvSearchResults = view.findViewById(R.id.rvSearchResults); // Ensure this ID exists in XML
+        rvSearchResults = view.findViewById(R.id.rvSearchResults);
         tvTotalAmount = view.findViewById(R.id.tvTotalAmount);
         etSearchProduct = view.findViewById(R.id.etSearchProduct);
         layoutEmptyCart = view.findViewById(R.id.layoutEmptyCart);
@@ -159,13 +165,29 @@ public class SalesFragment extends Fragment {
         setupSearchLogic();
     }
 
+    // 4. METHODE CORRIGÉE AVEC PREFERENCE MANAGER
     private void loadCurrentUser() {
-        SharedPreferences prefs = getActivity().getSharedPreferences("HanoutyPrefs", Activity.MODE_PRIVATE);
-        int userId = prefs.getInt("userId", -1);
+        if (!preferenceManager.isLoggedIn()) {
+            Toast.makeText(getContext(), "Veuillez vous connecter", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Récupération ID (String -> int)
+        String userIdStr = preferenceManager.getUserId();
+        int userId = -1;
+        try {
+            if (userIdStr != null && !userIdStr.isEmpty()) {
+                userId = Integer.parseInt(userIdStr);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
         if (userId != -1) {
             database.userDAO().getUserById(userId).observe(getViewLifecycleOwner(), user -> {
                 currentUser = user;
-                loadUserProducts(userId);
+                // Important : on charge les produits de cet utilisateur pour la recherche
+                loadUserProducts(user.getId_User());
             });
         }
     }
@@ -223,8 +245,6 @@ public class SalesFragment extends Fragment {
             rvSearchResults.setVisibility(View.GONE);
         }
     }
-    // The old searchProductByName method is removed as its functionality is
-    // replaced by filterProducts.
 
     private void addProductByBarcode(String barcode) {
         // Run on background thread
@@ -254,9 +274,7 @@ public class SalesFragment extends Fragment {
     }
 
     private void checkPermissionAndGeneratePdf() {
-        // Android 10+ (Scoped Storage) doesn't need WRITE_EXTERNAL_STORAGE for
-        // Downloads
-        // But for compatibility or if using external public dir:
+        // Android 10+ (Scoped Storage) doesn't need WRITE_EXTERNAL_STORAGE for Downloads
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(getContext(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -270,7 +288,9 @@ public class SalesFragment extends Fragment {
 
     private void processCheckout() {
         if (currentUser == null) {
-            Toast.makeText(getContext(), "Utilisateur non chargé", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Utilisateur non chargé ou non connecté", Toast.LENGTH_SHORT).show();
+            // Tentative de rechargement au cas où
+            loadCurrentUser();
             return;
         }
 
@@ -294,6 +314,12 @@ public class SalesFragment extends Fragment {
 
                 long factureId = database.factureDAO().addFacture(facture);
 
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        // ... (Code existant) ...
+                    });
+                }
+
                 // B. Process Items (Insert Sale & Update Stock)
                 for (CartAdapter.CartItem item : items) {
                     // Create Sale Link
@@ -309,17 +335,12 @@ public class SalesFragment extends Fragment {
                     // Update Product Stock
                     ProductData product = item.product;
                     int newQuantity = product.getQuantity() - item.quantity;
-                    // Prevent negative stock ? For now allow it or clamp to 0.
-                    // Let's allow negative for simplicity (audit trail) or clamp if requested.
-                    // User said "diminuer la quantité", didn't specify strict checks.
                     product.setQuantity(newQuantity);
                     database.productDAO().modifyProduct(product);
                 }
 
-                // C. Success - Generate PDF on Main Thread (or here?)
-                // PDF generation involves IO, safe to do here but Toast needs Main.
-
-                File pdfFile = new PdfGenerator(getContext()).generateInvoice(currentUser, items, finalTotal);
+                // C. Success - Generate PDF on Main Thread
+                File pdfFile = new PdfGenerator(getContext()).generateInvoice(currentUser, items, finalTotal, factureId);
 
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
@@ -345,10 +366,6 @@ public class SalesFragment extends Fragment {
                 e.printStackTrace();
             }
         });
-    }
-
-    private void generatePdf() {
-        // Deprecated/Refactored into processCheckout
     }
 
     private void openPdf(File file) {

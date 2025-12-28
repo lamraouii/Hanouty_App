@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:paddingHorizontal="24dp"
+            android:paddingHorizontal="12dp"
             android:paddingBottom="24dp">
             
             <androidx.cardview.widget.CardView
@@ -89,7 +89,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
 
                     <!-- Titre -->
                     <TextView
@@ -198,7 +201,6 @@
                         app:boxStrokeWidthFocused="0dp"
                         app:startIconDrawable="@drawable/ic_lock"
                         app:startIconTint="@color/hanouty_text_secondary"
-                        app:endIconMode="password_toggle"
                         app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                         app:hintEnabled="false"
                         style="@style/Widget.Material3.TextInputLayout.FilledBox"
@@ -208,7 +210,7 @@
                             android:id="@+id/editCurrentPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Mot de passe actuel (requis)"
+                            android:hint="Mot de passe actuel"
                             android:inputType="textPassword"
                             android:fontFamily="@font/poppins"
                             android:textSize="14sp"
@@ -227,7 +229,6 @@
                         app:boxStrokeWidthFocused="0dp"
                         app:startIconDrawable="@drawable/ic_key"
                         app:startIconTint="@color/hanouty_text_secondary"
-                        app:endIconMode="password_toggle"
                         app:shapeAppearanceOverlay="@style/RoundedInputStyle"
                         app:hintEnabled="false"
                         style="@style/Widget.Material3.TextInputLayout.FilledBox"

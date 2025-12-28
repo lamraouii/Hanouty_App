@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
 
         android:padding="20dp"
-        android:paddingTop="48dp"
-        android:layout_marginTop="31dp"
+        android:paddingTop="45dp"
+        android:layout_marginTop="25dp"
         android:paddingBottom="16dp">
 
         <TextView
@@ -28,57 +28,55 @@
 
         <ImageView
             android:id="@+id/btnAddProduct"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/bg_icon_orange"
             android:clickable="true"
             android:focusable="true"
-            android:padding="16dp"
+            android:padding="12dp"
             android:src="@drawable/ic_add"
             app:tint="@color/white" />
     </RelativeLayout>
-
     <LinearLayout
         android:id="@+id/searchFilterBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/headerSection"
         android:orientation="horizontal"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="16dp"
-        android:weightSum="10">
+        android:paddingHorizontal="24dp"
+        android:paddingBottom="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_search_bar"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_search_input_light"
             android:orientation="horizontal"
-            android:padding="12dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_search"
-                app:tint="@color/text_label"
+                app:tint="#9E9E9E"
                 android:layout_marginEnd="12dp" />
 
             <EditText
                 android:id="@+id/etSearch"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="Rechercher un produit..."
-                android:textColor="@color/text_dark"
-                android:textColorHint="@color/text_label"
-                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textColorHint="#9E9E9E"
+                android:textSize="15sp"
                 android:maxLines="1"
+                android:imeOptions="actionSearch"
                 android:inputType="text" />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -99,14 +97,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
-        android:background="@drawable/bg_bottom_nav_rounded"
-        android:elevation="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:background="@drawable/bg_bottom_nav_floating"
+        android:elevation="12dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="8dp"
         android:weightSum="4">
 
-        <!-- Home -->
         <LinearLayout
             android:id="@+id/navHome"
             android:layout_width="0dp"
@@ -115,26 +114,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                app:tint="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp" />
+                app:tint="@color/white" /> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Vente -->
         <LinearLayout
             android:id="@+id/navVente"
             android:layout_width="0dp"
@@ -143,13 +139,13 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_cart"
                 app:tint="@color/white" />
 
@@ -158,11 +154,10 @@
                 android:layout_height="wrap_content"
                 android:text="Vente"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Produits -->
         <LinearLayout
             android:id="@+id/navProduits"
             android:layout_width="0dp"
@@ -170,29 +165,26 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="6dp"
-            android:background="@drawable/bg_nav_selected"
+            android:background="@drawable/bg_nav_pill_selected"
+            android:paddingVertical="8dp"
+            android:elevation="4dp"
             android:clickable="true"
             android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_store"
-                app:tint="@color/maron" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Produits"
-                android:textColor="@color/maron"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
+                app:tint="#C17431" /> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Produits"
+            android:textColor="#C17431"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp" />
         </LinearLayout>
 
-        <!-- Profile -->
         <LinearLayout
             android:id="@+id/navProfile"
             android:layout_width="0dp"
@@ -201,13 +193,13 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_person"
                 app:tint="@color/white" />
 
@@ -216,9 +208,10 @@
                 android:layout_height="wrap_content"
                 android:text="Profile"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

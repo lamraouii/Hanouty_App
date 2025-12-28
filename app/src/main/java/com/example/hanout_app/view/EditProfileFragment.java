@@ -21,30 +21,23 @@ public class EditProfileFragment extends Fragment {
 
     private EditText editName, editPhone, editNewPassword, editCurrentPassword;
     private HanoutDatabase database;
+    private PreferenceManager preferenceManager; // Ajout du manager
     private UserData currentUser;
-    private int currentUserId = 1; // Assuming user ID 1 for now
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_edit_profile, container, false);
-        // Changer la couleur de la barre d'état en terracotta/marron
-        ((MainActivity) getActivity()).setStatusBarColor(R.color.maron);
-
-        // Set status bar color to match the header background if needed,
-        // but the layout has a header image, so maybe keep it transparent or default.
-        // For now, let's keep it consistent.
-
-        return rootView;
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize database
+        // 1. Initialisation de la DB et du PreferenceManager
         database = HanoutDatabase.getInstance(getContext());
+        preferenceManager = new PreferenceManager(requireContext());
 
         // Initialize views
         editName = view.findViewById(R.id.editName);
@@ -52,16 +45,18 @@ public class EditProfileFragment extends Fragment {
         editNewPassword = view.findViewById(R.id.editNewPassword);
         editCurrentPassword = view.findViewById(R.id.editCurrentPassword);
 
-        // Load user data from Session
-        android.content.SharedPreferences prefs = getActivity().getSharedPreferences("HanoutyPrefs",
-                android.content.Context.MODE_PRIVATE);
-        int userId = prefs.getInt("userId", -1);
+        // 2. Récupérer l'ID utilisateur via PreferenceManager
+        String userIdStr = preferenceManager.getUserId();
 
-        if (userId != -1) {
-            loadUserData(userId);
+        if (!userIdStr.isEmpty()) {
+            try {
+                int userId = Integer.parseInt(userIdStr);
+                loadUserData(userId);
+            } catch (NumberFormatException e) {
+                handleSessionError();
+            }
         } else {
-            Toast.makeText(getContext(), "Erreur session. Veuillez vous reconnecter.", Toast.LENGTH_SHORT).show();
-            ((MainActivity) getActivity()).navigateToSignIn();
+            handleSessionError();
         }
 
         // Back button
@@ -75,6 +70,14 @@ public class EditProfileFragment extends Fragment {
         view.findViewById(R.id.btnSave).setOnClickListener(v -> saveChanges());
     }
 
+    private void handleSessionError() {
+        Toast.makeText(getContext(), "Erreur session. Veuillez vous reconnecter.", Toast.LENGTH_SHORT).show();
+        preferenceManager.logoutUser(); // Nettoyer proprement
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).navigateToSignIn();
+        }
+    }
+
     private void loadUserData(int userId) {
         database.userDAO().getUserById(userId).observe(getViewLifecycleOwner(), new Observer<UserData>() {
             @Override
@@ -83,22 +86,21 @@ public class EditProfileFragment extends Fragment {
                     currentUser = userData;
                     editName.setText(userData.getName());
                     editPhone.setText(userData.getPhone());
-                    // Don't pre-fill password fields
+                    // On ne pré-remplit pas les mots de passe par sécurité
                 }
             }
         });
     }
 
     private void saveChanges() {
-        if (currentUser == null)
-            return;
+        if (currentUser == null) return;
 
         String newName = editName.getText().toString().trim();
         String newPhone = editPhone.getText().toString().trim();
         String newPassword = editNewPassword.getText().toString().trim();
         String currentPasswordInput = editCurrentPassword.getText().toString().trim();
 
-        // Validation
+        // --- Validation ---
         if (TextUtils.isEmpty(newName)) {
             editName.setError("Le nom est requis");
             return;
@@ -119,7 +121,7 @@ public class EditProfileFragment extends Fragment {
             return;
         }
 
-        // Update data
+        // --- Mise à jour de l'objet User ---
         currentUser.setName(newName);
         currentUser.setPhone(newPhone);
 
@@ -127,12 +129,24 @@ public class EditProfileFragment extends Fragment {
             currentUser.setPassword(newPassword);
         }
 
-        // Perform update in background
+        // --- Sauvegarde en arrière-plan ---
         new Thread(() -> {
+            // 1. Mise à jour Base de Données (SQLite)
             database.userDAO().modifyUser(currentUser);
+
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
+
+                    // 2. IMPORTANT : Mise à jour du PreferenceManager (Session)
+                    // Cela permet d'avoir le nouveau nom affiché partout dans l'appli sans se reconnecter
+                    preferenceManager.createLoginSession(
+                            String.valueOf(currentUser.getId_User()),
+                            newName,
+                            newPhone
+                    );
+
                     Toast.makeText(getContext(), "Profil mis à jour avec succès", Toast.LENGTH_SHORT).show();
+
                     if (getActivity() != null) {
                         ((MainActivity) getActivity()).onBackPressed();
                     }

@@ -1,5 +1,6 @@
 package com.example.hanout_app.view;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +16,30 @@ public class OnboardingStep3Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_onboarding_step_3, container, false);
 
-        // Changer la couleur de la barre d'état en vert
-        ((MainActivity) getActivity()).setStatusBarColor(R.color.moroccan_green_button);
-
         Button btnStart = view.findViewById(R.id.btnStart);
+
         btnStart.setOnClickListener(v -> {
-            ((MainActivity) getActivity()).navigateToSignIn();
+            MainActivity mainActivity = (MainActivity) requireActivity();
+
+            // 1. IMPORTANT : On dit au PreferenceManager que l'intro est finie
+            mainActivity.getPreferenceManager().setFirstTimeLaunch(false);
+
+            // 2. Ensuite, on navigue vers la connexion
+            mainActivity.navigateToSignIn();
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Forcer le portrait uniquement quand ce fragment est visible
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 }
